@@ -1,0 +1,24 @@
+{
+  "accounts": {
+    "account{0}": "0x5B38Da6a701c568545dCfcB03FcB875f56beddC4"
+  },
+  "linkReferences": {},
+  "transactions": [
+    {
+      "timestamp": 1754154095136,
+      "record": {
+        "value": "0",
+        "inputs": "(address,string)",
+        "parameters": [
+          "0xD92A51904e415639Ed23760edf50D2b0258bb9C6",
+          "bafkreihkflotgydkob5gdp37uqbzddzgkqf4pktv5zyksgaonuw7nxy43y"
+        ],
+        "name": "safeMint",
+        "type": "function",
+        "to": "created{undefined}",
+        "from": "account{0}"
+      }
+    }
+  ],
+  "abis": {}
+}
