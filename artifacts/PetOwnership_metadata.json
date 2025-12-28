@@ -1,6 +1,6 @@
 {
 	"compiler": {
-		"version": "0.8.30+commit.73712a01"
+		"version": "0.8.31+commit.fd3a2265"
 	},
 	"language": "Solidity",
 	"output": {
@@ -10,6 +10,16 @@
 					{
 						"internalType": "address",
 						"name": "initialOwner",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "vetRegistry",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "shelterRegistry",
 						"type": "address"
 					}
 				],
@@ -246,6 +256,19 @@
 				"anonymous": false,
 				"inputs": [
 					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Paused",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
 						"indexed": true,
 						"internalType": "address",
 						"name": "to",
@@ -306,6 +329,19 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "Unpaused",
+				"type": "event"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "address",
@@ -351,6 +387,32 @@
 					}
 				],
 				"name": "getApproved",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getShelterRegistry",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getVetRegistry",
 				"outputs": [
 					{
 						"internalType": "address",
@@ -425,6 +487,26 @@
 						"internalType": "address",
 						"name": "",
 						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pause",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "paused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -527,6 +609,32 @@
 			{
 				"inputs": [
 					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "setShelterRegistry",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_address",
+						"type": "address"
+					}
+				],
+				"name": "setVetRegistry",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
 						"internalType": "bytes4",
 						"name": "interfaceId",
 						"type": "bytes4"
@@ -607,6 +715,13 @@
 					}
 				],
 				"name": "transferOwnership",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "unpause",
 				"outputs": [],
 				"stateMutability": "nonpayable",
 				"type": "function"
@@ -723,8 +838,14 @@
 				"MetadataUpdate(uint256)": {
 					"details": "This event emits when the metadata of a token is changed. So that the third-party platforms such as NFT market could timely update the images and related attributes of the NFT."
 				},
+				"Paused(address)": {
+					"details": "Emitted when the pause is triggered by `account`."
+				},
 				"Transfer(address,address,uint256)": {
 					"details": "Emitted when `tokenId` token is transferred from `from` to `to`."
+				},
+				"Unpaused(address)": {
+					"details": "Emitted when the pause is lifted by `account`."
 				}
 			},
 			"kind": "dev",
@@ -749,6 +870,9 @@
 				},
 				"ownerOf(uint256)": {
 					"details": "Returns the owner of the `tokenId` token. Requirements: - `tokenId` must exist."
+				},
+				"paused()": {
+					"details": "Returns true if the contract is paused, and false otherwise."
 				},
 				"renounceOwnership()": {
 					"details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
@@ -790,7 +914,7 @@
 		"compilationTarget": {
 			"contracts/PetOwnership.sol": "PetOwnership"
 		},
-		"evmVersion": "prague",
+		"evmVersion": "osaka",
 		"libraries": {},
 		"metadata": {
 			"bytecodeHash": "ipfs"
@@ -802,6 +926,22 @@
 		"remappings": []
 	},
 	"sources": {
+		"@openzeppelin/contracts/access/AccessControl.sol": {
+			"keccak256": "0x1a6b4f6b7798ab80929d491b89d5427a9b3338c0fd1acd0ba325f69c6f1646af",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7bb7f346c12a14dc622bc105ce3c47202fbc89f4b153a28a63bb68193297330c",
+				"dweb:/ipfs/QmagwF8P3bUBXwdo159ueEnY9dLSvEWwK24kk2op58egwG"
+			]
+		},
+		"@openzeppelin/contracts/access/IAccessControl.sol": {
+			"keccak256": "0xbff9f59c84e5337689161ce7641c0ef8e872d6a7536fbc1f5133f128887aba3c",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://b308f882e796f7b79c9502deacb0a62983035c6f6f4e962b319ba6a1f4a77d3d",
+				"dweb:/ipfs/QmaWCW7ahEQqFjwhSUhV7Ae7WhfNvzSpE7DQ58hvEooqPL"
+			]
+		},
 		"@openzeppelin/contracts/access/Ownable.sol": {
 			"keccak256": "0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb",
 			"license": "MIT",
@@ -840,6 +980,14 @@
 			"urls": [
 				"bzz-raw://3490d794728f5bfecb46820431adaff71ba374141545ec20b650bb60353fac23",
 				"dweb:/ipfs/QmPsfxjVpMcZbpE7BH93DzTpEaktESigEw4SmDzkXuJ4WR"
+			]
+		},
+		"@openzeppelin/contracts/security/Pausable.sol": {
+			"keccak256": "0x0849d93b16c9940beb286a7864ed02724b248b93e0d80ef6355af5ef15c64773",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://4ddabb16009cd17eaca3143feadf450ac13e72919ebe2ca50e00f61cb78bc004",
+				"dweb:/ipfs/QmSPwPxX7d6TTWakN5jy5wsaGkS1y9TW8fuhGSraMkLk2B"
 			]
 		},
 		"@openzeppelin/contracts/token/ERC721/ERC721.sol": {
@@ -955,11 +1103,35 @@
 			]
 		},
 		"contracts/PetOwnership.sol": {
-			"keccak256": "0x4492918c1dce89a02e4f3a5084c6c6faa5a51e96633f4ab19c24db1d52711e29",
+			"keccak256": "0x779e9f8509dd2bde1e3fcc719ca5289c989fa9a79e464e93aa98c0685638f8eb",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://af4fbea008b2b910c3fc87b851ee23c92182bf4ac8d87dcfce37ce1f2fcf786a",
-				"dweb:/ipfs/QmXxvsFQKy8dvEwB9Dcw7FfSNAQFgKWm5692DdyNneT4fX"
+				"bzz-raw://254a557e8bd0a2da56237daae34032e928c5e7c3661d917f5a93fa62c3444a4b",
+				"dweb:/ipfs/QmfEyjtM22L8j4nerYXXcnCCLJ88D1sowjRX3GGAQRKaXV"
+			]
+		},
+		"contracts/Registry.sol": {
+			"keccak256": "0x94906eae48ef9bfd93c87ea5fcabc798275d182ee918cdde855e6f5148ddeca7",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a13c561b75b995996d655df3be3d4a5341dc6676d61474773c39f0df1d17208d",
+				"dweb:/ipfs/QmbeUxy9Aft1vp8TttxLnEZeAgNne62mT8EZzKakUJEaRo"
+			]
+		},
+		"contracts/ShelterRegistry.sol": {
+			"keccak256": "0xc14e4fb840d48b9a8f56fbf23b163ff7591ed8246fcb575e28c1d6b1e3aa0bca",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://a0257d95c4eeeefde9db641d1907884c23a114d44b2919bfa7753963ae4d561d",
+				"dweb:/ipfs/QmNk9BdR2GcKGtD6WLbc6esWxC8iuAKafi7XPiBM6uvhoC"
+			]
+		},
+		"contracts/VetRegistry.sol": {
+			"keccak256": "0x070859de530508110e30faeb9a5e75c536974310b676740df5ce91261ead10ad",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://63fa5e66ea5d9dcb32a5e55172b13e56c482e1efaee8ef0ef2eb8937a26fd337",
+				"dweb:/ipfs/QmfBG8CBNPRrvRf9UVTkvH5WFncWVmuio9bgLg4dhQkJmy"
 			]
 		}
 	},
